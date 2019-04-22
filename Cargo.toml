@@ -5,3 +5,4 @@ authors = ["Cemil Oten <cemil.oten@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+amethyst = "0.10.0"
