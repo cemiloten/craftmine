@@ -1,2 +1,7 @@
-/target
-**/*.rs.bk
+/*
+/*/
+
+!.gitignore
+!.gitattributes
+!/Assets/
+!/ProjectSettings/
