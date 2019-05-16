@@ -10,9 +10,10 @@ public class Block : MonoBehaviour {
     void Update() { }
 
     public static Block Create(Vector3Int position, GameObject prefab) {
-        Vector3 pos = new Vector3(position.x, position.y, position.z);
+        Vector3 pos = MapManager.GetWorldPos(position);
         GameObject go = Instantiate(prefab, pos, Quaternion.identity);
         Block block = go.AddComponent<Block>() as Block;
         return block;
     }
+
 }
