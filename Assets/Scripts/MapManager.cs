@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour {
     public GameObject blockPrefab;
-    public int size;
-
-    private List<Block> blocks = new List<Block>();
+    public int height;
+    public int width;
 
     public static MapManager Instance { get; private set; }
-    public static int Size => Instance.size;
 
     private void Awake() {
         if (Instance == null) {
@@ -19,30 +17,23 @@ public class MapManager : MonoBehaviour {
         }
     }
 
-    void Start() {
-        GenerateMap();
+    private void Start() {
+        GenerateBlocks();
     }
 
-    void Update() { }
+    private void Update() { }
 
-    void GenerateMap() {
-        for (int x = 0; x < size; ++x) {
-            for (int z = 0; z < size; ++z) {
-                for (int y = 0; y < size; ++y) {
-                    if (Random.Range(0, 2) > 0) {
-                        Block.Create(new Vector3Int(x, y, z), blockPrefab);
-                    }
-                }
+    private void GenerateBlocks() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                GameObject go = Instantiate(blockPrefab, new Vector3(x, 0f, y), Quaternion.identity);
+                Cell cell = go.AddComponent<Cell>() as Cell;
+                cell.Initialize(new Vector2Int(x, y), CellType.Ground);
             }
         }
     }
 
-    public static Vector3 GetWorldPos(Vector3Int position) {
-        int size = Size;
-        return new Vector3(
-            position.x - size / 2f + 0.5f,
-            position.y - size / 2f + 0.5f,
-            position.z - size / 2f + 0.5f);
+    public static Vector3 ToWorldPosition(Vector2Int position) {
+        return new Vector3(position.x + 0.5f, 0f, position.y + 0.5f);
     }
-
 }
