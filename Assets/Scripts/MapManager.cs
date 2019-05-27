@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour {
+    private List<Cell> _cells = new List<Cell>();
+        
     public GameObject blockPrefab;
     public int height;
     public int width;
@@ -21,7 +23,9 @@ public class MapManager : MonoBehaviour {
         GenerateBlocks();
     }
 
-    private void Update() { }
+    public Cell CellAt(Vector2Int position) {
+        return _cells[position.x + position.y * width];
+    } 
 
     private void GenerateBlocks() {
         for (int y = 0; y < height; y++) {

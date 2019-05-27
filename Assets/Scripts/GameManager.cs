@@ -5,5 +5,6 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
         Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        
     }
 }

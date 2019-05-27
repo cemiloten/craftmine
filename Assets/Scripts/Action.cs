@@ -6,8 +6,8 @@ public enum ActionType {
 }
 
 public abstract class Action : MonoBehaviour {
-    protected Cell _source;
-    protected Cell _target;
+    protected Cell source;
+    protected Cell target;
 
     public bool IsActive { get; protected set; }
     public ActionType Type { get; protected set; }

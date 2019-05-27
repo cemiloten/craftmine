@@ -8,4 +8,7 @@ public class Move : Action {
         Type = ActionType.Movement;
     }
 
+    protected override void UpdateAction() {
+        throw new System.NotImplementedException();
+    }
 }

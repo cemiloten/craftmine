@@ -1,28 +1,41 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public enum Direction {
     None = 0,
     Up,
     Down,
     Right,
-    Left,
+    Left
+    
 }
 
-public static class DirectionMethods {
 
+public static class DirectionMethods {
     public static Direction FromVector(Vector2 vec) {
         if (Mathf.Abs(vec.x) > Mathf.Abs(vec.y)) {
-            if (vec.x > 0f) {
-                return Direction.Right;
-            } else {
-                return Direction.Left;
-            }
-        } else {
-            if (vec.y > 0f) {
-                return Direction.Up;
-            } else {
-                return Direction.Down;
-            }
+            return vec.x > 0f ? Direction.Right : Direction.Left;
+        }
+
+        return vec.y > 0f ? Direction.Up : Direction.Down;
+    }
+
+    public static Vector2Int AddDirection(this Direction direction, Vector2Int source) {
+        switch (direction) {
+            case Direction.Up:
+                return new Vector2Int(source.x, source.y + 1);
+                break;
+            case Direction.Down:
+                return new Vector2Int(source.x, source.y - 1);
+                break;
+            case Direction.Right:
+                return new Vector2Int(source.x + 1, source.y);
+                break;
+            case Direction.Left:
+                return new Vector2Int(source.x - 1, source.y);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
     }
 }
