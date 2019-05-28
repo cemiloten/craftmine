@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public enum Direction {
@@ -7,7 +8,6 @@ public enum Direction {
     Down,
     Right,
     Left
-    
 }
 
 
@@ -20,23 +20,13 @@ public static class DirectionMethods {
         return vec.y > 0f ? Direction.Up : Direction.Down;
     }
 
-    public static Vector2Int AddDirection(this Direction direction, Vector2Int source) {
+    public static Vector2Int ToVector2Int(this Direction direction) {
         switch (direction) {
-            case Direction.Up:
-                return new Vector2Int(source.x, source.y + 1);
-                break;
-            case Direction.Down:
-                return new Vector2Int(source.x, source.y - 1);
-                break;
-            case Direction.Right:
-                return new Vector2Int(source.x + 1, source.y);
-                break;
-            case Direction.Left:
-                return new Vector2Int(source.x - 1, source.y);
-                break;
-            case Direction.None:
-            default:
-                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            case Direction.Up:    return Vector2Int.up;
+            case Direction.Down:  return Vector2Int.down;
+            case Direction.Right: return Vector2Int.right;
+            case Direction.Left:  return Vector2Int.left;
+            default:              return new Vector2Int(0, 0);
         }
     }
 }

@@ -9,30 +9,37 @@ public class Player : MonoBehaviour {
     public Action[] actions;
 
 
-    private void Awake() {
+    private void Start() {
         actions = GetComponents<Action>();
         foreach (Action action in actions) {
-            if (action.Type != ActionType.Movement) continue;
+            if (action.Type != ActionType.Movement)
+                continue;
+
             _move = action as Move;
             break;
+        }
+
+        if (_move == null) {
+            throw new Exception("move is null");
         }
     }
 
     private void OnEnable() {
         TouchManager.OnTouchEnd += OnTouchEnd;
     }
-    
+
     private void OnDisable() {
         TouchManager.OnTouchEnd -= OnTouchEnd;
     }
 
     private void OnTouchEnd(TouchInfo touchInfo) {
         Cell source = MapManager.Instance.CellAt(position);
-        
-        Direction dir = DirectionMethods.FromVector(touchInfo.Swipe);
-        Cell target = MapManager.Instance.CellAt(dir.AddDirection(position));
-        
+
+        Direction swipeDirection = DirectionMethods.FromVector(touchInfo.Swipe);
+        Cell target =
+            MapManager.Instance.CellAt(position + swipeDirection.ToVector2Int());
+
         _move.Act(source, target);
-        Debug.Log("on touchend");
+        position = target.position;
     }
 }

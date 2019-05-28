@@ -11,8 +11,8 @@ public class TouchInfo : IEquatable<TouchInfo> {
     public int FingerId => _fingerId;
 
     public Vector2 Position {
-        get => _startPosition;
-        set => _startPosition = value;
+        get => _position;
+        set => _position = value;
     }
 
     public Vector2 StartPosition => _startPosition;
@@ -98,29 +98,31 @@ public static class TouchManager {
     public static event OnTouchEndHandler OnTouchEnd;
     public static event OnTouchCancelHandler OnTouchCancel;
 
-    private static readonly List<TouchInfo> touchInfos = new List<TouchInfo>();
+    private static List<TouchInfo> _touchInfos = new List<TouchInfo>();
 
-    public static int TouchCount { get; private set; }
+    public static int TouchCount => _touchInfos.Count;
 
     private static void UpdateMouseButton(int num) {
         if (Input.GetMouseButtonDown(num)) {
             TouchInfo touchInfo = new TouchInfo(num, Input.mousePosition);
-            touchInfos.Add(touchInfo);
+            _touchInfos.Add(touchInfo);
             OnTouchStart?.Invoke(touchInfo);
         }
 
         if (Input.GetMouseButtonUp(num)) {
-            foreach (TouchInfo touchInfo in touchInfos) {
-                if (touchInfo.FingerId == num) {
-                    touchInfos.Remove(touchInfo);
-                    OnTouchEnd?.Invoke(touchInfo);
-                    break;
+            foreach (TouchInfo touchInfo in _touchInfos) {
+                if (touchInfo.FingerId != num) {
+                    continue;
                 }
+
+                _touchInfos.Remove(touchInfo);
+                OnTouchEnd?.Invoke(touchInfo);
+                break;
             }
         }
 
-        for (int i = 0; i < touchInfos.Count; ++i) {
-            touchInfos[i].Position = Input.mousePosition;
+        for (int i = 0; i < _touchInfos.Count; ++i) {
+            _touchInfos[i].Position = Input.mousePosition;
         }
     }
 
@@ -173,9 +175,9 @@ public static class TouchManager {
     }
 
     private static TouchInfo GetTouchInfo(Touch touch) {
-        for (int i = 0; i < touchInfos.Count; ++i) {
-            if (touchInfos[i].FingerId == touch.fingerId) {
-                return touchInfos[i];
+        for (int i = 0; i < _touchInfos.Count; ++i) {
+            if (_touchInfos[i].FingerId == touch.fingerId) {
+                return _touchInfos[i];
             }
         }
 

@@ -54,6 +54,7 @@ public abstract class Action : MonoBehaviour {
         if (_currentTime > duration) {
             EndAction();
         }
+
         UpdateAction(_source, _target, _currentTime);
     }
 }
