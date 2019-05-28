@@ -34,6 +34,7 @@ public static class DirectionMethods {
             case Direction.Left:
                 return new Vector2Int(source.x - 1, source.y);
                 break;
+            case Direction.None:
             default:
                 throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }

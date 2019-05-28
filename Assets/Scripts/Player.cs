@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     private Move _move;
-    
+
     public Vector2Int position;
     public Direction direction;
     public Action[] actions;
-    
+
 
     private void Awake() {
         actions = GetComponents<Action>();
-        foreach (Action t in actions) {
-            if (t.Type != ActionType.Movement) continue;
-            _move = t as Move;
+        foreach (Action action in actions) {
+            if (action.Type != ActionType.Movement) continue;
+            _move = action as Move;
             break;
         }
     }
@@ -21,10 +21,18 @@ public class Player : MonoBehaviour {
     private void OnEnable() {
         TouchManager.OnTouchEnd += OnTouchEnd;
     }
+    
+    private void OnDisable() {
+        TouchManager.OnTouchEnd -= OnTouchEnd;
+    }
 
     private void OnTouchEnd(TouchInfo touchInfo) {
         Cell source = MapManager.Instance.CellAt(position);
-        Cell target = MapManager.Instance.CellAt(position);
-        _move.Act();
+        
+        Direction dir = DirectionMethods.FromVector(touchInfo.Swipe);
+        Cell target = MapManager.Instance.CellAt(dir.AddDirection(position));
+        
+        _move.Act(source, target);
+        Debug.Log("on touchend");
     }
 }

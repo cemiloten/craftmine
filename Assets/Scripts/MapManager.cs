@@ -32,7 +32,9 @@ public class MapManager : MonoBehaviour {
             for (int x = 0; x < width; x++) {
                 GameObject go = Instantiate(blockPrefab, new Vector3(x, 0f, y), Quaternion.identity);
                 Cell cell = go.AddComponent<Cell>() as Cell;
-                cell.Initialize(new Vector2Int(x, y), CellType.Ground);
+                cell.position = new Vector2Int(x, y);
+                cell.type = CellType.Ground;
+                _cells.Add(cell);
             }
         }
     }

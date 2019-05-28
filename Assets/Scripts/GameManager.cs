@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -5,6 +6,9 @@ public class GameManager : MonoBehaviour {
 
     private void Start() {
         Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        
+    }
+
+    private void Update() {
+        TouchManager.Update();
     }
 }

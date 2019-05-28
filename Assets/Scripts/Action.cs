@@ -6,39 +6,54 @@ public enum ActionType {
 }
 
 public abstract class Action : MonoBehaviour {
-    protected Cell source;
-    protected Cell target;
+    public float duration = 1f;
 
-    public bool IsActive { get; protected set; }
+    private float _currentTime;
+    private Cell _source;
+    private Cell _target;
+
+    private bool IsActive { get; set; }
+
     public ActionType Type { get; protected set; }
 
     protected abstract void SetActionType();
-    
-    protected abstract void UpdateAction();
+    protected abstract void OnActionStart();
+    protected abstract void OnActionEnd();
+    protected abstract void UpdateAction(Cell source, Cell target, float currentTime);
 
-    protected delegate void OnActionStartDelegate(Cell source, Cell target);
+    public void Act(Cell source, Cell target) {
+        Debug.Log("acting");
+        _source = source;
+        _target = target;
+        StartAction();
+    }
 
-    public void Act() {
+    private void StartAction() {
+        IsActive = true;
+        _currentTime = 0f;
+
         OnActionStart();
     }
 
-    protected virtual void OnActionStart() {
-        IsActive = true;
-    }
-
-    protected virtual void OnActionEnd() {
+    private void EndAction() {
         IsActive = false;
-    }
 
+        OnActionEnd();
+    }
 
     private void Awake() {
         SetActionType();
-
     }
 
     private void Update() {
-        if (IsActive) {
-            UpdateAction();
+        if (!IsActive) {
+            return;
         }
+
+        _currentTime += Time.deltaTime;
+        if (_currentTime > duration) {
+            EndAction();
+        }
+        UpdateAction(_source, _target, _currentTime);
     }
 }
