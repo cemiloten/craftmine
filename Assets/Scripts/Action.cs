@@ -17,7 +17,9 @@ public abstract class Action : MonoBehaviour {
     public ActionType Type { get; protected set; }
 
     protected abstract void SetActionType();
-    protected abstract void UpdateAction(Cell source, Cell target, float currentTime);
+
+    protected abstract void UpdateAction(
+        Cell source, Cell target, float currentTime);
 
     public delegate void OnActionStartHandler();
 

@@ -49,7 +49,8 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        if (Move.Act(MapManager.Instance.CellAt(Position), MapManager.Instance.CellAt(targetPosition))) {
+        if (Move.Act(MapManager.Instance.CellAt(Position),
+            MapManager.Instance.CellAt(targetPosition))) {
             Position = targetPosition;
         }
     }

@@ -7,9 +7,9 @@ public class Move : Action {
     }
 
     protected override void UpdateAction(Cell source, Cell target, float currentTime) {
-        transform.position = Vector3.Lerp(
-            MapManager.ToWorldPosition(source.position),
-            MapManager.ToWorldPosition(target.position),
+        float y = transform.position.y;
+        transform.position = Vector3.Lerp(MapManager.ToWorldPosition(source.position, y),
+            MapManager.ToWorldPosition(target.position, y),
             currentTime / duration);
     }
 }

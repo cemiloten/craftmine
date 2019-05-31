@@ -3,7 +3,7 @@ using UnityEngine;
 public enum CellType {
     None = 0,
     Ground,
-    Portal
+    Portal,
 }
 
 public class Cell : MonoBehaviour {
