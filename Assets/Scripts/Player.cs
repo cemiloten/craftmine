@@ -2,27 +2,8 @@
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    private Move _move;
-
-    public Vector2Int position;
-    public Direction direction;
-    public Action[] actions;
-
-
-    private void Start() {
-        actions = GetComponents<Action>();
-        foreach (Action action in actions) {
-            if (action.Type != ActionType.Movement)
-                continue;
-
-            _move = action as Move;
-            break;
-        }
-
-        if (_move == null) {
-            throw new Exception("move is null");
-        }
-    }
+    public Vector2Int Position { get; private set; }
+    public Move Move { get; set; }
 
     private void OnEnable() {
         TouchManager.OnTouchEnd += OnTouchEnd;
@@ -32,14 +13,44 @@ public class Player : MonoBehaviour {
         TouchManager.OnTouchEnd -= OnTouchEnd;
     }
 
+    private void Update() {
+        var direction = Direction.None;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            direction = Direction.Right;
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            direction = Direction.Up;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            direction = Direction.Left;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            direction = Direction.Down;
+        }
+
+        if (direction != Direction.None) {
+            MoveTowards(direction);
+        }
+    }
+
     private void OnTouchEnd(TouchInfo touchInfo) {
-        Cell source = MapManager.Instance.CellAt(position);
-
         Direction swipeDirection = DirectionMethods.FromVector(touchInfo.Swipe);
-        Cell target =
-            MapManager.Instance.CellAt(position + swipeDirection.ToVector2Int());
+        if (swipeDirection != Direction.None) {
+            MoveTowards(swipeDirection);
+        }
+    }
 
-        _move.Act(source, target);
-        position = target.position;
+    private void MoveTowards(Direction direction) {
+        Vector2Int targetPosition = Position + direction.ToVector2Int();
+        if (!MapManager.Instance.IsPositionOnGrid(targetPosition)) {
+            return;
+        }
+
+        if (Move.Act(MapManager.Instance.CellAt(Position), MapManager.Instance.CellAt(targetPosition))) {
+            Position = targetPosition;
+        }
     }
 }

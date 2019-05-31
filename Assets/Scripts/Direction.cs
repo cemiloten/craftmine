@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum Direction {
     None = 0,

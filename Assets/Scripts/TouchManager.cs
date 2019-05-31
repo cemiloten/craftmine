@@ -98,31 +98,31 @@ public static class TouchManager {
     public static event OnTouchEndHandler OnTouchEnd;
     public static event OnTouchCancelHandler OnTouchCancel;
 
-    private static List<TouchInfo> _touchInfos = new List<TouchInfo>();
+    private static readonly List<TouchInfo> TouchInfos = new List<TouchInfo>();
 
-    public static int TouchCount => _touchInfos.Count;
+    public static int TouchCount => TouchInfos.Count;
 
     private static void UpdateMouseButton(int num) {
         if (Input.GetMouseButtonDown(num)) {
-            TouchInfo touchInfo = new TouchInfo(num, Input.mousePosition);
-            _touchInfos.Add(touchInfo);
+            var touchInfo = new TouchInfo(num, Input.mousePosition);
+            TouchInfos.Add(touchInfo);
             OnTouchStart?.Invoke(touchInfo);
         }
 
         if (Input.GetMouseButtonUp(num)) {
-            foreach (TouchInfo touchInfo in _touchInfos) {
+            foreach (TouchInfo touchInfo in TouchInfos) {
                 if (touchInfo.FingerId != num) {
                     continue;
                 }
 
-                _touchInfos.Remove(touchInfo);
+                TouchInfos.Remove(touchInfo);
                 OnTouchEnd?.Invoke(touchInfo);
                 break;
             }
         }
 
-        for (int i = 0; i < _touchInfos.Count; ++i) {
-            _touchInfos[i].Position = Input.mousePosition;
+        foreach (TouchInfo touchInfo in TouchInfos) {
+            touchInfo.Position = Input.mousePosition;
         }
     }
 
@@ -175,9 +175,9 @@ public static class TouchManager {
     }
 
     private static TouchInfo GetTouchInfo(Touch touch) {
-        for (int i = 0; i < _touchInfos.Count; ++i) {
-            if (_touchInfos[i].FingerId == touch.fingerId) {
-                return _touchInfos[i];
+        foreach (TouchInfo touchInfo in TouchInfos) {
+            if (touchInfo.FingerId == touch.fingerId) {
+                return touchInfo;
             }
         }
 

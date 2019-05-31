@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum ActionType {
     None = 0,
-    Movement,
+    Movement
 }
 
 public abstract class Action : MonoBehaviour {
@@ -17,28 +17,35 @@ public abstract class Action : MonoBehaviour {
     public ActionType Type { get; protected set; }
 
     protected abstract void SetActionType();
-    protected abstract void OnActionStart();
-    protected abstract void OnActionEnd();
     protected abstract void UpdateAction(Cell source, Cell target, float currentTime);
 
-    public void Act(Cell source, Cell target) {
-        Debug.Log("acting");
+    public delegate void OnActionStartHandler();
+
+    public delegate void OnActionEndHandler();
+
+    public event OnActionStartHandler OnActionStart;
+    public event OnActionEndHandler OnActionEnd;
+
+    public bool Act(Cell source, Cell target) {
+        if (IsActive) {
+            return false;
+        }
+
         _source = source;
         _target = target;
         StartAction();
+        return true;
     }
 
     private void StartAction() {
         IsActive = true;
         _currentTime = 0f;
-
-        OnActionStart();
+        OnActionStart?.Invoke();
     }
 
     private void EndAction() {
         IsActive = false;
-
-        OnActionEnd();
+        OnActionEnd?.Invoke();
     }
 
     private void Awake() {

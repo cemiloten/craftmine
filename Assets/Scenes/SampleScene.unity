@@ -165,8 +165,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 6024910529574852310, guid: 63086d6cac509fd46a3e7493845983ec,
     type: 3}
-  height: 5
-  width: 5
+  height: 8
+  width: 8
 --- !u!1 &447818004
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1587243303480979690, guid: 00fe9fa9713490d448cc93c4520acc15,
     type: 3}
+  level: 0
 --- !u!4 &447818006
 Transform:
   m_ObjectHideFlags: 0
