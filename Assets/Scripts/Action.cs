@@ -18,8 +18,7 @@ public abstract class Action : MonoBehaviour {
 
     protected abstract void SetActionType();
 
-    protected abstract void UpdateAction(
-        Cell source, Cell target, float currentTime);
+    protected abstract void UpdateAction(Cell source, Cell target, float currentTime);
 
     public delegate void OnActionStartHandler();
 
@@ -64,6 +63,10 @@ public abstract class Action : MonoBehaviour {
             EndAction();
         }
 
-        UpdateAction(_source, _target, _currentTime);
+        // IsActive can become false in the call to EndAction that just happened,
+        // so we need to check again to make sure that we still need to update.
+        if (IsActive) {
+            UpdateAction(_source, _target, _currentTime);
+        }
     }
 }

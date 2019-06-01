@@ -2,11 +2,19 @@
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    public Vector2Int Position { get; private set; }
+    public Vector2Int Position { get; set; }
     public Move Move { get; set; }
 
     private void OnEnable() {
         TouchManager.OnTouchEnd += OnTouchEnd;
+        Move.OnActionEnd += OnMoveEnd;
+    }
+
+    private void OnMoveEnd() {
+        // todo: find a way to force the player's transform.position to the correct value.
+        // think about a better way to implement action events...
+        // Position = new position after move...
+        // transform.position = new position into world position...
     }
 
     private void OnDisable() {
@@ -50,7 +58,7 @@ public class Player : MonoBehaviour {
         }
 
         if (Move.Act(MapManager.Instance.CellAt(Position),
-            MapManager.Instance.CellAt(targetPosition))) {
+                     MapManager.Instance.CellAt(targetPosition))) {
             Position = targetPosition;
         }
     }

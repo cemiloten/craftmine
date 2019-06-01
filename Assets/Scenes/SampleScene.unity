@@ -165,8 +165,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 6024910529574852310, guid: 63086d6cac509fd46a3e7493845983ec,
     type: 3}
-  height: 8
-  width: 8
+  height: 10
+  width: 10
+  startOffset: 2
+  minDistanceToGoal: 8
 --- !u!1 &447818004
 GameObject:
   m_ObjectHideFlags: 0

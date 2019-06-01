@@ -19,7 +19,7 @@ public class MapManager : Singleton<MapManager> {
         return !IsPositionOnGrid(position) ? null : _cells[position.x + position.y * width];
     }
 
-    public void GenerateBlocks() {
+    public void InstantiateBlocks() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 GameObject go = Instantiate(blockPrefab, ToWorldPosition(new Vector2Int(x, y), -1f),
@@ -32,18 +32,26 @@ public class MapManager : Singleton<MapManager> {
         }
     }
 
-    public PositionPair GenerateEntryAndExit() {
-        PositionPair positionPair;
-        Vector2Int start = Vector2Int.zero;
+    public void ResetBlocks() {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                var pos = new Vector2Int(x, y);
+                Cell cell = CellAt(pos);
+                cell.type = CellType.Ground;
+                cell.transform.position = ToWorldPosition(pos, -1f);
+            }
+        }
+    }
+
+    public Vector2Int GenerateStartPosition() {
         var offset = new Vector2Int(Random.Range(0, startOffset), Random.Range(0, startOffset));
-        start.x = Random.Range(0, 2) > 0 ? width - 1 - offset.x : offset.x;
-        start.y = Random.Range(0, 2) > 0 ? height - 1 - offset.y : offset.y;
-        positionPair.Start = start;
+        return new Vector2Int(Random.Range(0, 2) > 0 ? width - 1 - offset.x : offset.x,
+                              Random.Range(0, 2) > 0 ? height - 1 - offset.y : offset.y);
+    }
 
-        // todo: work on end position from here
-        positionPair.End = Vector2Int.zero;
-
-        return positionPair;
+    public Vector2Int GenerateEndPosition(Vector2Int startPosition) {
+        return new Vector2Int(Random.Range(0, width),
+                              Random.Range(0, height));
     }
 
     public bool IsPositionOnGrid(Vector2Int position) {
